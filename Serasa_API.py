@@ -1,5 +1,6 @@
 import requests
 import pprint
+import locale
 from Tokens import keys_serasa as ks
 
 def pp(*args):
@@ -29,6 +30,8 @@ def get_info_serasa_CPF(CPF):
 
 def serasa_result(CPF):
   dados_serasa = get_info_serasa_CPF(CPF)
+
+  array = {}
   response_msg = dados_serasa['status']['mensagem'] # mensagem 'Sucesso' para seguir
   if response_msg == 'Sucesso':
     status_restricao = dados_serasa['status']['descricaoCodigoResposta']
@@ -36,10 +39,17 @@ def serasa_result(CPF):
     nome_consultado = dados_serasa['entrada']['nomeConsultado']
     qtd_ocorrencias = dados_serasa['resultado']['quadroResumoConsta']['quantidadeTotalOcorrencias']
     registros = dados_serasa['resultado']['quadroResumoConsta']['registros']
-
-
-  return True
-
-  else: return False, dados_serasa['status']['mensagem']
+    if status_restricao == 'Constam Restrições':
+      valor_total = 0
+      for x in registros.items():
+        valor = x[1]['valorTotal'].replace('R$ ','').replace('.','').replace(',','.')
+        try: valor_total += float(valor)
+        except: pass
+      locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+      valor_formatado = locale.currency(valor_total, grouping=True)
+    
+    return True, array
+  else:
+      return False, dados_serasa['status']['mensagem']
   
 
