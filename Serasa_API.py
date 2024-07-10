@@ -40,7 +40,6 @@ def serasa_result(CPF):
 
   return True
 
-  else:
-    return False, dados_serasa['status']['mensagem']
+  else: return False, dados_serasa['status']['mensagem']
   
 
