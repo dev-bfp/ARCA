@@ -72,8 +72,8 @@ def SCPC_result(solicitante,cpf):
             
         except: array['Resumo Débitos'] = False,'Sem restrição'
 
-        return array
+        return True, array
     else:
-        return dados_cpf[1]
+        return False, dados_cpf[1]
 
 

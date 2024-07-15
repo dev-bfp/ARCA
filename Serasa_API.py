@@ -34,22 +34,30 @@ def serasa_result(CPF):
   array = {}
   response_msg = dados_serasa['status']['mensagem'] # mensagem 'Sucesso' para seguir
   if response_msg == 'Sucesso':
-    status_restricao = dados_serasa['status']['descricaoCodigoResposta']
-    protocolo = dados_serasa['status']['protocolo']
-    nome_consultado = dados_serasa['entrada']['nomeConsultado']
-    qtd_ocorrencias = dados_serasa['resultado']['quadroResumoConsta']['quantidadeTotalOcorrencias']
-    registros = dados_serasa['resultado']['quadroResumoConsta']['registros']
-    if status_restricao == 'Constam Restrições':
+    array['Status Restrição'] = dados_serasa['status']['descricaoCodigoResposta']
+    array['Protocolo'] = dados_serasa['status']['protocolo']
+    array['Nome Consultado'] = dados_serasa['entrada']['nomeConsultado']
+    array['CPF'] = dados_serasa['entrada']['documentoConsultado']
+    array['Quantidade de Ocorrências'] = dados_serasa['resultado']['quadroResumoConsta']['quantidadeTotalOcorrencias']
+    array['Registros'] = dados_serasa['resultado']['quadroResumoConsta']['registros']
+    if array['Status Restrição'] == 'Constam Restrições':
       valor_total = 0
-      for x in registros.items():
+      for x in array['Registros'].items():
         valor = x[1]['valorTotal'].replace('R$ ','').replace('.','').replace(',','.')
         try: valor_total += float(valor)
         except: pass
       locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
       valor_formatado = locale.currency(valor_total, grouping=True)
+      array['Valor Total'] = valor_formatado
+      resumo = msg_resumo = (f"Foram encontrados {array['Quantidade de Ocorrências']} registros no valor total de {array['Valor Total']}") 
+      array['Resumo'] = resumo
     
     return True, array
   else:
       return False, dados_serasa['status']['mensagem']
-  
 
+
+
+
+dados = serasa_result('12946318451')
+    

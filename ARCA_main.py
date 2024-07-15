@@ -66,7 +66,8 @@ def get_info_sheets():
 
 
 
-
+print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+telegram_send('-')
 msg_start = telegram_send('Starting check')
 dados_sheets = get_info_sheets()
 if dados_sheets is None:
@@ -75,8 +76,11 @@ if dados_sheets is None:
     time.sleep(2)
     telegram_delete(msg_start[1])
     telegram_delete(msg_noCPF[1])
-    #exit()
+    telegram_send('-')
+    print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+    exit()
 else:
+    telegram_delete(msg_start[1])
     for x in dados_sheets.items():
         CPF = x[0]
         solicitante = x[1]['Solicitante']
@@ -93,37 +97,81 @@ else:
         telegram_send(msg_consult)
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
         dados_SCPC = SCPC_result(solicitante,CPF)
-        data_nasc_SCPC = dados_SCPC['Cadastro']['SPCA-500-NASC']
-        nome_cliente = dados_SCPC['Cadastro']['SPCA-500-NOME']
-        restricao = dados_SCPC['Resumo Débitos']
+        
+        if dados_SCPC[0] == False: # Validação do status da consulta
+            telegram_send('SCPC: '+dados_SCPC[1])
+            sheet.update_acell('F' + str(id_linha+1), dados_SCPC[1])
+            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
 
-        if restricao[0]:
-            result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
-            resultado = restricao[1]
         else:
-            result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
-            resultado = restricao[1]
+            data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
+            nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
+            restricao = dados_SCPC[1]['Resumo Débitos']
 
-        sheet.update_acell('F' + str(id_linha+1), result_SCPC)
-        sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+            if restricao[0] == False:
+                result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
+                resultado = restricao[1]
+            else:
+                result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
+                resultado = ''
 
-        telegram_delete(msg_tele_scpc[1])
-        msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
-                    "Cliente: " + nome_cliente + "\n" +
-                    "CPF: " + CPF + "\n" +
-                    "Data de Nascimento: " + data_nasc_SCPC + "\n" +
-                    "Resultado: " + result_SCPC + "\n" + "\n" +
-                    resultado)
-        telegram_send(msg_SCPC)
+            sheet.update_acell('F' + str(id_linha+1), result_SCPC)
+            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
 
-        if restricao[0] == False:
-            msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
-            print('Inicia Serasa')
-            # inicia Serasa
-            # apaga telegram
-        else:
-            msg_tele_serasa = telegram_send('Fim da consulta')
-            
+            telegram_delete(msg_tele_scpc[1])
+            msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
+                        "Cliente: " + nome_cliente + "\n" +
+                        "CPF: " + CPF + "\n" +
+                        "Data de Nascimento: " + data_nasc_SCPC + "\n" +
+                        "Resultado: " + result_SCPC + "\n" + "\n" +
+                        resultado)
+            telegram_send(msg_SCPC)
+
+            if restricao[0] == False:
+                msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
+                print('Inicia Serasa')
+                dados_Serasa = serasa_result(CPF)
+                pp(dados_Serasa)
+                telegram_delete(msg_tele_serasa[1])
+                if dados_Serasa[0]:
+                    if dados_Serasa[1]['Status Restrição'] == 'Constam Restrições':
+                        result_serasa = '🚫🚫🚫 Com restrição 🚫🚫🚫'
+                        resumo_serasa = dados_Serasa[1]['Resumo']
+
+                    else:
+                        result_serasa = '✅✅✅ Sem restrição ✅✅✅'
+                        resumo_serasa = ''
+                        
+                    
+                    msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
+                            "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
+                            "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
+                            "Resultado: " + result_serasa + "\n" + "\n" +
+                            resumo_serasa)
+
+                    telegram_send(msg_Serasa)
+                    telegram_send('-')
+                    sheet.update_acell('H' + str(id_linha+1), result_serasa)
+                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+                    print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                else:
+                    print('Serasa: ' + dados_Serasa[1])
+                    telegram_send(f'Serasa: {dados_Serasa[1]}')
+                    sheet.update_acell('H' + str(id_linha+1), dados_Serasa[1])
+                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+                    
+            else:
+                sheet.update_acell('H' + str(id_linha+1), 'Restrição no SCPC')
+                sheet.update_acell('I' + str(id_linha+1), '-')
+                msg_tele_serasa = telegram_send('Fim da consulta')
+                telegram_send('-')
+                print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+
+    end_msg = telegram_send('End check')
+    telegram_delete(end_msg[1])
+    exit()
+
+       
         
     
 
