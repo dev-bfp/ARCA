@@ -101,7 +101,7 @@ else:
         if dados_SCPC[0] == False: # Validação do status da consulta
             telegram_send('SCPC: '+dados_SCPC[1])
             sheet.update_acell('F' + str(id_linha+1), dados_SCPC[1])
-            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
         else:
             data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
@@ -116,7 +116,7 @@ else:
                 resultado = ''
 
             sheet.update_acell('F' + str(id_linha+1), result_SCPC)
-            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
@@ -152,13 +152,13 @@ else:
                     telegram_send(msg_Serasa)
                     telegram_send('-')
                     sheet.update_acell('H' + str(id_linha+1), result_serasa)
-                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 else:
                     print('Serasa: ' + dados_Serasa[1])
                     telegram_send(f'Serasa: {dados_Serasa[1]}')
                     sheet.update_acell('H' + str(id_linha+1), dados_Serasa[1])
-                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M'))
+                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     
             else:
                 sheet.update_acell('H' + str(id_linha+1), 'Restrição no SCPC')
