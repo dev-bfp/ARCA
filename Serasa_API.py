@@ -20,7 +20,7 @@ def get_info_serasa_CPF(CPF):
             'consulta': ks['consulta'],
             'tipodocumento': 'F',
             'documento': CPF,
-            'estatica': 'S', # S = Consulta estática (simulação) | N = Consulta real
+            'estatica': 'N', # S = Consulta estática (simulação) | N = Consulta real
             'tiporesposta': 'J',
             'agregados': ''}
   
@@ -55,4 +55,7 @@ def serasa_result(CPF):
     return True, array
   else:
       return False, 'Serasa: ' + dados_serasa['status']['mensagem']
-    
+
+
+
+dados = serasa_result('18902755819')
