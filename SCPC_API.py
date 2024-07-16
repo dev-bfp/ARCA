@@ -52,8 +52,10 @@ def SCPC_result(solicitante,cpf):
         
         score = matriz['SPCA-601-SCORE-CRED']
         array['Score'] = score[0]['SPCA-601-SCORE']
+
         try: array['Dados adicionais'] = matriz['SPCA-501-LOCALIZACAO']
         except: array['Dados adicionais'] = "Sem informações adicionais"
+
         try:
             dados_debitos = {}
             resumo_debitos = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']['SPCA-108-DEBITO']['SPCA-108-RESUMO']
@@ -70,7 +72,8 @@ def SCPC_result(solicitante,cpf):
 
             array['Resumo Débitos'] = True,msg_resumo, dados_debitos
             
-        except: array['Resumo Débitos'] = False,'Sem restrição'
+        except:
+            array['Resumo Débitos'] = False,'Sem restrição'
 
         return True, array
     else:

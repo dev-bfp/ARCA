@@ -18,7 +18,8 @@ from Serasa_API import *
 
 # Configuração credencial GoogleApis
 scope = ["https://www.googleapis.com/auth/drive"]
-credentials_google = ServiceAccountCredentials.from_json_keyfile_name(caminho_local_credentials, scope)
+#credentials_google = ServiceAccountCredentials.from_json_keyfile_name(caminho_local_credentials, scope)
+credentials_google = ServiceAccountCredentials.from_json_keyfile_dict(credencial_google, scope)
 client = gspread.authorize(credentials_google)
 # Endereçamento GoogleSheets
 #nmSheets = "VENDAS REDFIBRA"
@@ -29,7 +30,7 @@ def pp(*args):
     pprint.pp(args)
     
 def telegram_send(bot_message):
-    send_text = 'https://api.telegram.org/bot' + bot_token2 + '/sendMessage?chat_id=' + bot_chatID2 + '&parse_mode=Markdown&text=' + bot_message
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
     response = requests.get(send_text)
     res = response.json()
     if res['ok']:
@@ -40,14 +41,14 @@ def telegram_send(bot_message):
 
 def telegram_delete(id):
     if id != 0:
-        send_text = 'https://api.telegram.org/bot' + bot_token2 + '/deleteMessage?chat_id=' + bot_chatID2 + '&message_id=' + str(id)
+        send_text = 'https://api.telegram.org/bot' + bot_token + '/deleteMessage?chat_id=' + bot_chatID + '&message_id=' + str(id)
         response = requests.get(send_text)
         res = response.json()
         if res['ok']:
             status_msg = 'Sim'
-            return f'Mensagem apagada: {status_msg}'
+            return f"Mensagem apagada: {status_msg}"
         else:
-            return f'Not deleted  -  {res['description']}'
+            return f"Not deleted  -  {res['description']}"
 
 
 def get_info_sheets():
@@ -125,6 +126,7 @@ else:
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)
+            print(msg_SCPC)
             telegram_send(msg_SCPC)
 
             if restricao[0] == False:
@@ -148,7 +150,7 @@ else:
                             "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
                             "Resultado: " + result_serasa + "\n" + "\n" +
                             resumo_serasa)
-
+                    print(msg_Serasa)
                     telegram_send(msg_Serasa)
                     telegram_send('-')
                     sheet.update_acell('H' + str(id_linha+1), result_serasa)
@@ -165,9 +167,10 @@ else:
                 sheet.update_acell('I' + str(id_linha+1), '-')
                 msg_tele_serasa = telegram_send('Fim da consulta')
                 telegram_send('-')
-                print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                print(msg_tele_serasa + ' ' + datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
     end_msg = telegram_send('End check')
+    print(end_msg)
     telegram_delete(end_msg[1])
     exit()
 
