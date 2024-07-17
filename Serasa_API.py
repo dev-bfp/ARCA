@@ -55,7 +55,3 @@ def serasa_result(CPF):
     return True, array
   else:
       return False, 'Serasa: ' + dados_serasa['status']['mensagem']
-
-
-
-dados = serasa_result('18902755819')

@@ -77,7 +77,6 @@ if dados_sheets is None:
     time.sleep(2)
     telegram_delete(msg_start[1])
     telegram_delete(msg_noCPF[1])
-    telegram_send('-')
     print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     exit()
 else:
@@ -166,7 +165,6 @@ else:
                 sheet.update_acell('H' + str(id_linha+1), 'Restrição no SCPC')
                 sheet.update_acell('I' + str(id_linha+1), '-')
                 msg_tele_serasa = telegram_send('Fim da consulta')
-                telegram_send('-')
                 print(msg_tele_serasa + ' ' + datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
     end_msg = telegram_send('End check')
