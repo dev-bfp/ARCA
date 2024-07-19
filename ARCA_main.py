@@ -26,6 +26,8 @@ client = gspread.authorize(credentials_google)
 nmSheets = "Vendas Automaticas"
 sheet = client.open(nmSheets).worksheet("Consulta de CPF")
 
+# teste
+
 def pp(*args):
     pprint.pp(args)
     
