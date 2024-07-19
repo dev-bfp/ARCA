@@ -146,6 +146,7 @@ else:
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)
             print(msg_SCPC)
+            
             telegram_send(msg_SCPC)
 
             if restricao[0] == False:
