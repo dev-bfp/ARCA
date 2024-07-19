@@ -15,7 +15,10 @@ from Tokens import *
 from SCPC_API import *
 from Serasa_API import *
 
-# teste 8
+# teste 12
+# teste1 
+
+
 
 
 # Configuração credencial GoogleApis
