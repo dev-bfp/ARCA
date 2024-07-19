@@ -15,7 +15,7 @@ from Tokens import *
 from SCPC_API import *
 from Serasa_API import *
 
-# teste 13
+# teste 14
 
 # Configuração credencial GoogleApis
 scope = ["https://www.googleapis.com/auth/drive"]
