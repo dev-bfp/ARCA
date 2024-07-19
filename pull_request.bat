@@ -1,0 +1,1 @@
+git -C /Users/DEV/Documents/GitHub/ARCA pull
