@@ -28,6 +28,7 @@ sheet = client.open(nmSheets).worksheet("Consulta de CPF")
 
 # teste
 
+
 def pp(*args):
     pprint.pp(args)
     
