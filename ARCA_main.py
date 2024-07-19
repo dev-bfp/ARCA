@@ -15,6 +15,8 @@ from Tokens import *
 from SCPC_API import *
 from Serasa_API import *
 
+#teste3
+
 
 # Configuração credencial GoogleApis
 scope = ["https://www.googleapis.com/auth/drive"]
@@ -25,9 +27,6 @@ client = gspread.authorize(credentials_google)
 #nmSheets = "VENDAS REDFIBRA"
 nmSheets = "Vendas Automaticas"
 sheet = client.open(nmSheets).worksheet("Consulta de CPF")
-
-# teste
-
 
 def pp(*args):
     pprint.pp(args)
