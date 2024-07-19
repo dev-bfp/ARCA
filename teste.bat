@@ -1,1 +1,1 @@
-start /min C:/Users/DEV/Documents/GitHub/ARCA/ARCA.bat
+start /min /Users/DEV/Documents/GitHub/ARCA/ARCA.bat
