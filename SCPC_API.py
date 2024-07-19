@@ -1,11 +1,24 @@
 import requests
 import json
 import pprint
+import time
 from Tokens import keys_scpc as kc
+from Tokens import bot_token,bot_chatID
 
 def pp(*args):
     pprint.pp(args)
+    
 
+def telegram_send(bot_message):
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    response = requests.get(send_text)
+    res = response.json()
+    if res['ok']:
+        status_msg = 'Sim'
+        return f'Mensagem enviada: {status_msg}  -  Mensagem ID:',res['result']['message_id'],bot_message
+    else:
+        return 0
+    
 
 def get_info_SCPC_CPF(solicitante,cpf):
     url = "https://api.scpc.inf.br/api/consulta/rest"
@@ -32,17 +45,26 @@ def get_info_SCPC_CPF(solicitante,cpf):
     if response.status_code == 200:
         print('Consulta realizada')
         return True, response.json()
+
+    elif response.status_code == 500:
+        msg = 'Servidor SCPC com lentidão: Favor aguardar 40 segundos'
+        print(msg)
+        telegram_send(msg)
+        time.sleep(40)
+        return 'Erro 500', msg           
+        
     else:
-        print(f"Erro na consulta: {response.status_code}")
-        print(response.text)
-        mensagem_erro = response.json()['SPCA-XML']['RESPOSTA']['RESPOSTA-RETORNO']['MENSAGEM-RESPOSTA']
-        return None, mensagem_erro
+        response_json = response.json()
+        mensagem_erro =  response_json['SPCA-XML']['RESPOSTA']['RESPOSTA-RETORNO']
+        msg = f"Erro na consulta: {mensagem_erro['MENSAGEM-RESPOSTA']} - Código {mensagem_erro['STATUS-RESPOSTA']}"
+        print(msg)
+        return None, msg
     # --------------------------- Fim ---------------------------
 
 
 def SCPC_result(solicitante,cpf):
     dados_cpf = get_info_SCPC_CPF(solicitante,cpf)
-    if dados_cpf[0]:
+    if dados_cpf[0] == True:
         array = {}
         array['Código de resposta'] = dados_cpf[1]['SPCA-XML']['RESPOSTA']['NUMERO-RESPOSTA']
         matriz = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']
@@ -76,6 +98,8 @@ def SCPC_result(solicitante,cpf):
             array['Resumo Débitos'] = False,'Sem restrição'
 
         return True, array
+    elif dados_cpf[0] == 'Erro 500':
+        return False, dados_cpf[1]
     else:
         return False, dados_cpf[1]
 

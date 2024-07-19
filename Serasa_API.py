@@ -54,4 +54,5 @@ def serasa_result(CPF):
     
     return True, array
   else:
+      print('Serasa: ', dados_serasa['status']['mensagem'])
       return False, 'Serasa: ' + dados_serasa['status']['mensagem']

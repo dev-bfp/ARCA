@@ -30,18 +30,18 @@ def pp(*args):
     pprint.pp(args)
     
 def telegram_send(bot_message):
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    send_text = 'https://api.telegram.org/bot' + bot_token3 + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
     response = requests.get(send_text)
     res = response.json()
     if res['ok']:
         status_msg = 'Sim'
-        return f'Mensagem enviada: {status_msg}  -  Mensagem ID:',res['result']['message_id']
+        return f'Mensagem enviada: {status_msg}  -  Mensagem ID:',res['result']['message_id'],bot_message
     else:
         return 0
 
 def telegram_delete(id):
     if id != 0:
-        send_text = 'https://api.telegram.org/bot' + bot_token + '/deleteMessage?chat_id=' + bot_chatID + '&message_id=' + str(id)
+        send_text = 'https://api.telegram.org/bot' + bot_token3 + '/deleteMessage?chat_id=' + bot_chatID + '&message_id=' + str(id)
         response = requests.get(send_text)
         res = response.json()
         if res['ok']:
@@ -67,17 +67,17 @@ def get_info_sheets():
 
 
 
-print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 telegram_send('-')
 msg_start = telegram_send('Starting check')
 dados_sheets = get_info_sheets()
+sheet.update_acell('K1', datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 if dados_sheets is None:
-    print('End code')
+    print('End code',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     msg_noCPF = telegram_send('Sem CPF para consulta')
     time.sleep(2)
     telegram_delete(msg_start[1])
     telegram_delete(msg_noCPF[1])
-    print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     exit()
 else:
     telegram_delete(msg_start[1])
@@ -98,15 +98,34 @@ else:
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
         dados_SCPC = SCPC_result(solicitante,CPF)
         
+        
         if dados_SCPC[0] == False: # Validação do status da consulta
-            telegram_send('SCPC: '+dados_SCPC[1])
-            sheet.update_acell('F' + str(id_linha+1), dados_SCPC[1])
-            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+            telegram_send(f'SCPC: {dados_SCPC[1]}')
+            print(dados_SCPC[1])
+            sheet.update_acell('G' + str(id_linha+1), dados_SCPC[1])
+            sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
+            '''
+            elif dados_SCPC[0] == 'Erro 500':
+            
+            for i in range(5):
+                print(f'Tentativa de consulta: {i+1}')
+                telegram_send(f'Tentativa de consulta: {i+1}')
+                # dados = SCPC_result(solicitante,cpf)
+                if i == 5:
+                    print(f'Tentativas excedidas: Favor contatar o Brian')
+                    telegram_send(f'Tentativas excedidas: Favor contatar o Brian')
+                    exit()
+                else:
+                    if dados[0]:
+                        return dados
+            '''
+        
         else:
             data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
             nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
             restricao = dados_SCPC[1]['Resumo Débitos']
+            score = dados_SCPC[1]['Score']
 
             if restricao[0] == True:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
@@ -115,14 +134,15 @@ else:
                 result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
                 resultado = ''
 
-            sheet.update_acell('F' + str(id_linha+1), result_SCPC)
-            sheet.update_acell('G' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+            sheet.update_acell('G' + str(id_linha+1), result_SCPC)
+            sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
                         "Cliente: " + nome_cliente + "\n" +
                         "CPF: " + CPF + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
+                        "Score: " + score + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)
             print(msg_SCPC)
@@ -152,23 +172,23 @@ else:
                     print(msg_Serasa)
                     telegram_send(msg_Serasa)
                     telegram_send('-')
-                    sheet.update_acell('H' + str(id_linha+1), result_serasa)
-                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                    sheet.update_acell('I' + str(id_linha+1), result_serasa)
+                    sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 else:
                     print('Serasa: ' + dados_Serasa[1])
                     telegram_send(dados_Serasa[1])
-                    sheet.update_acell('H' + str(id_linha+1), dados_Serasa[1])
-                    sheet.update_acell('I' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                    sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
+                    sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     
             else:
-                sheet.update_acell('H' + str(id_linha+1), 'Restrição no SCPC')
-                sheet.update_acell('I' + str(id_linha+1), '-')
+                sheet.update_acell('I' + str(id_linha+1), 'Restrição no SCPC')
+                sheet.update_acell('J' + str(id_linha+1), '-')
                 msg_tele_serasa = telegram_send('Fim da consulta')
-                print(msg_tele_serasa + ' ' + datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                print(msg_tele_serasa[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
     end_msg = telegram_send('End check')
-    print(end_msg)
+    print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     telegram_delete(end_msg[1])
     exit()
 
