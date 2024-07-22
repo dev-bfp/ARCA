@@ -170,7 +170,6 @@ else:
                             resumo_serasa)
                     print(msg_Serasa)
                     telegram_send(msg_Serasa)
-                    telegram_send('-')
                     sheet.update_acell('I' + str(id_linha+1), result_serasa)
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
