@@ -179,6 +179,8 @@ else:
                     telegram_send(dados_Serasa[1])
                     sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                
+                msg_tele_serasa = telegram_send('Fim da consulta')
                     
             else:
                 sheet.update_acell('I' + str(id_linha+1), 'Restrição no SCPC')
