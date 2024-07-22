@@ -15,8 +15,6 @@ from Tokens import *
 from SCPC_API import *
 from Serasa_API import *
 
-# Olá, mundo 2
-
 # Configuração credencial GoogleApis
 scope = ["https://www.googleapis.com/auth/drive"]
 #credentials_google = ServiceAccountCredentials.from_json_keyfile_name(caminho_local_credentials, scope)
@@ -69,7 +67,7 @@ def get_info_sheets():
 
 
 print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-telegram_send('-')
+# telegram_send('-')
 msg_start = telegram_send('Starting check')
 dados_sheets = get_info_sheets()
 sheet.update_acell('K1', datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
