@@ -134,7 +134,7 @@ else:
                 resultado = ''
             msg_plan = result_SCPC + '\n' + resultado if resultado != '' else result_SCPC
             sheet.update_acell('E' + str(id_linha+1), data_nasc_SCPC)
-            sheet.update_acell('G' + str(id_linha+1), result_SCPC)
+            sheet.update_acell('G' + str(id_linha+1), msg_plan)
             sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
             telegram_delete(msg_tele_scpc[1])
@@ -171,6 +171,8 @@ else:
                             resumo_serasa)
                     print(msg_Serasa)
                     telegram_send(msg_Serasa)
+
+                    msg_plan = result_serasa + '\n' + resumo_serasa if resumo_serasa != '' else result_serasa
                     sheet.update_acell('I' + str(id_linha+1), result_serasa)
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
