@@ -133,6 +133,7 @@ else:
                 result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
                 resultado = ''
 
+            sheet.update_acell('E' + str(id_linha+1), data_nasc_SCPC)
             sheet.update_acell('G' + str(id_linha+1), result_SCPC)
             sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
