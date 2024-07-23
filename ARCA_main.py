@@ -70,7 +70,7 @@ print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 # telegram_send('-')
 msg_start = telegram_send('Starting check')
 dados_sheets = get_info_sheets()
-sheet.update_acell('K1', datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+sheet.update_acell('L1', datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 if dados_sheets is None:
     print('End code',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     msg_noCPF = telegram_send('Sem CPF para consulta')
@@ -137,6 +137,7 @@ else:
             sheet.update_acell('E' + str(id_linha+1), data_nasc_SCPC)
             sheet.update_acell('G' + str(id_linha+1), msg_plan)
             sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+            sheet.update_acell('K' + str(id_linha+1), score)
 
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
