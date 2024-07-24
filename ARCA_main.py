@@ -64,22 +64,32 @@ def get_info_sheets():
     #pprint.pp(array)
     return array if array else None
 
+# Coleta id do último timestamp e deleta
+id_tel = sheet.acell('L2').value
+telegram_delete(id_tel)
 
-
+# Print timestamp no console e envia pro telegram
 print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-# telegram_send('-')
-msg_start = telegram_send('Starting check')
+
+# Insere timestamp e id do timestamp no sheets e também envia no telegram
+data_hora = datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+last_check = telegram_send(f'Última verificação - {data_hora}')
+sheet.update_acell('L1', data_hora)
+sheet.update_acell('L2', last_check[1])
+
+# Coleta informações do sheets
 dados_sheets = get_info_sheets()
-sheet.update_acell('L1', datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+
+# Valida se há dados para consulta e inicia algorítmo
 if dados_sheets is None:
-    print('End code',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     msg_noCPF = telegram_send('Sem CPF para consulta')
-    time.sleep(2)
-    telegram_delete(msg_start[1])
+    end_msg = telegram_send('End check')
     telegram_delete(msg_noCPF[1])
+    telegram_delete(end_msg[1])
+    print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     exit()
+    
 else:
-    telegram_delete(msg_start[1])
     for x in dados_sheets.items():
         CPF = x[0]
         solicitante = x[1]['Solicitante']
@@ -129,9 +139,11 @@ else:
             if restricao[0] == True:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                 resultado = restricao[1]
+                res = resultado.split
             else:
                 result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
                 resultado = ''
+
             msg_plan = result_SCPC + '\n' + resultado if resultado != '' else result_SCPC
             sheet.update_acell('D' + str(id_linha+1), nome_cliente)
             sheet.update_acell('E' + str(id_linha+1), data_nasc_SCPC)
@@ -196,10 +208,10 @@ else:
                     telegram_send('-')
                 print(msg_tele_serasa[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
-    end_msg = telegram_send('End check')
-    print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-    telegram_delete(end_msg[1])
-    exit()
+end_msg = telegram_send('End check')
+telegram_delete(end_msg[1])
+print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+exit()
 
        
       

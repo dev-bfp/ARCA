@@ -2,6 +2,7 @@ import requests
 import json
 import pprint
 import time
+import locale
 from Tokens import keys_scpc as kc
 from Tokens import bot_token,bot_chatID
 
@@ -82,7 +83,10 @@ def SCPC_result(solicitante,cpf):
             dados_debitos = {}
             resumo_debitos = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']['SPCA-108-DEBITO']['SPCA-108-RESUMO']
             dados_debitos['Total de Registros'] = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-DEVEDOR']
-            dados_debitos['Valor Total'] = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR']
+            valor_total = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR']
+            locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+            valor_formatado = locale.currency(valor_total, grouping=True)
+            dados_debitos['Valor Total'] = valor_formatado
             
             dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) #Data do primeiro débito
             dados_debitos['Data do Primeiro Débito'] = f'{dpd[6:8]}/{dpd[4:6]}/{dpd[0:4]}' # Data do primeiro débito formatado
