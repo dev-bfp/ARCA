@@ -85,7 +85,7 @@ def SCPC_result(solicitante,cpf):
             dados_debitos['Total de Registros'] = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-DEVEDOR']
             valor_total = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR']
             locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-            valor_formatado = locale.currency(valor_total, grouping=True)
+            # valor_formatado = locale.currency(valor_total, grouping=True)
             dados_debitos['Valor Total'] = valor_total
             
             dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) #Data do primeiro débito
