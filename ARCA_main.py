@@ -153,7 +153,7 @@ else:
 
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
-                        "Cliente: " + nome_cliente + "\n" +
+                        "Cliente: *" + nome_cliente + "*" + "\n" +
                         "CPF: " + CPF + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Score: " + score + "\n" +
@@ -179,7 +179,7 @@ else:
                         
                     
                     msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
-                            "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
+                            "Cliente: *" + dados_Serasa[1]['Nome Consultado'] + "*" + "\n" +
                             "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
                             "Resultado: " + result_serasa + "\n" + "\n" +
                             resumo_serasa)
