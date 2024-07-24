@@ -140,7 +140,7 @@ else:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                 resultado = restricao[1]
                 r = resultado.split(' ')
-                resumo_restri = result_SCPC + '\n' + f'{r[2]} registro(s) - valor total {r[8]}'
+                resumo_restri = result_SCPC + '\n' + f'{r[2]} registro(s) - valor total {r[9]}'
             else:
                 result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
                 resultado = ''
@@ -174,7 +174,7 @@ else:
                         result_serasa = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                         resumo_serasa = dados_Serasa[1]['Resumo']
                         rs = resumo_serasa.split(' ')
-                        resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[8]}'
+                        resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[9]}'
 
                     else:
                         result_serasa = '✅✅✅ Sem restrição ✅✅✅'
