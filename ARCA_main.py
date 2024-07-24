@@ -175,7 +175,7 @@ else:
                         resumo_serasa = dados_Serasa[1]['Resumo']
                         rs = resumo_serasa.split(' ')
                         resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[8]}'
-                        
+
                     else:
                         result_serasa = '✅✅✅ Sem restrição ✅✅✅'
                         resumo_serasa = ''
