@@ -43,7 +43,7 @@ def get_info_SCPC_CPF(solicitante,cpf):
     
     response = requests.post(url, headers=headers, data=json.dumps(body))
     
-    if response.status_code == 200:
+    if response.status_code == 200 or 0:
         print('Consulta realizada')
         return True, response.json()
 
@@ -86,7 +86,7 @@ def SCPC_result(solicitante,cpf):
             valor_total = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR']
             locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
             valor_formatado = locale.currency(valor_total, grouping=True)
-            dados_debitos['Valor Total'] = valor_formatado
+            dados_debitos['Valor Total'] = valor_total
             
             dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) #Data do primeiro débito
             dados_debitos['Data do Primeiro Débito'] = f'{dpd[6:8]}/{dpd[4:6]}/{dpd[0:4]}' # Data do primeiro débito formatado
@@ -106,5 +106,4 @@ def SCPC_result(solicitante,cpf):
         return False, dados_cpf[1]
     else:
         return False, dados_cpf[1]
-
 
