@@ -94,7 +94,7 @@ def SCPC_result(solicitante,cpf):
             dud = str(resumo_debitos['SPCA-108-MAIOR-DEB']['SPCA-108-M-DATA']) # Data do último débito
             dados_debitos['Data do Último Débito'] = f'{dud[6:8]}/{dud[4:6]}/{dud[0:4]}' # Data do último débito formatado
             
-            msg_resumo = (f"Foram encontrados {dados_debitos['Total de Registros']} registros no valor total de {dados_debitos['Valor Total']}" + "\n" +
+            msg_resumo = (f"Foram encontrados {dados_debitos['Total de Registros']} registros no valor total de {dados_debitos['Valor Total']} " + "\n" +
                           f"Primeira negativação em {dados_debitos['Data do Primeiro Débito']} e última negativação em {dados_debitos['Data do Último Débito']}")                       
 
             array['Resumo Débitos'] = True,msg_resumo, dados_debitos
