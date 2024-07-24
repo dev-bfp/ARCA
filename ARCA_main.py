@@ -139,15 +139,16 @@ else:
             if restricao[0] == True:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                 resultado = restricao[1]
-                res = resultado.split
+                r = resultado.split(' ')
+                resumo_restri = result_SCPC + '\n' + f'{r[2]} registro(s) - valor total {r[8]}'
             else:
                 result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
                 resultado = ''
+                resumo_restri = result_SCPC
 
-            msg_plan = result_SCPC + '\n' + resultado if resultado != '' else result_SCPC
             sheet.update_acell('D' + str(id_linha+1), nome_cliente)
             sheet.update_acell('E' + str(id_linha+1), data_nasc_SCPC)
-            sheet.update_acell('G' + str(id_linha+1), msg_plan)
+            sheet.update_acell('G' + str(id_linha+1), resumo_restri)
             sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
             sheet.update_acell('K' + str(id_linha+1), score)
 
@@ -172,10 +173,13 @@ else:
                     if dados_Serasa[1]['Status Restrição'] == 'Constam Restrições':
                         result_serasa = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                         resumo_serasa = dados_Serasa[1]['Resumo']
-
+                        rs = resumo_serasa.split(' ')
+                        resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[8]}'
+                        
                     else:
                         result_serasa = '✅✅✅ Sem restrição ✅✅✅'
                         resumo_serasa = ''
+                        resumo_restri_serasa = result_serasa
                         
                     
                     msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
@@ -186,8 +190,7 @@ else:
                     print(msg_Serasa)
                     telegram_send(msg_Serasa)
 
-                    msg_plan = result_serasa + '\n' + resumo_serasa if resumo_serasa != '' else result_serasa
-                    sheet.update_acell('I' + str(id_linha+1), result_serasa)
+                    sheet.update_acell('I' + str(id_linha+1), resumo_restri_serasa)
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 else:
