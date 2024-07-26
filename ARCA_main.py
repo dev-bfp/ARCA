@@ -90,6 +90,7 @@ if dados_sheets is None:
     exit()
     
 else:
+    # formata dados do GSheets
     for x in dados_sheets.items():
         CPF = x[0]
         solicitante = x[1]['Solicitante']
@@ -105,32 +106,13 @@ else:
         print(msg_consult)
         telegram_send(msg_consult)
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
+
+        # Inicia consulta no SCPC
         dados_SCPC = SCPC_result(solicitante,CPF)
         
-        
-        if dados_SCPC[0] == False: # Validação do status da consulta
-            telegram_send(f'SCPC: {dados_SCPC[1]}')
-            print(dados_SCPC[1])
-            sheet.update_acell('G' + str(id_linha+1), dados_SCPC[1])
-            sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-
-            '''
-            elif dados_SCPC[0] == 'Erro 500':
-            
-            for i in range(5):
-                print(f'Tentativa de consulta: {i+1}')
-                telegram_send(f'Tentativa de consulta: {i+1}')
-                # dados = SCPC_result(solicitante,cpf)
-                if i == 5:
-                    print(f'Tentativas excedidas: Favor contatar o Brian')
-                    telegram_send(f'Tentativas excedidas: Favor contatar o Brian')
-                    exit()
-                else:
-                    if dados[0]:
-                        return dados
-            '''
-        
-        else:
+        # processa informações da consulta
+        if dados_SCPC[0] == True: # Validação do status da consulta
+            # separar def
             data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
             nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
             restricao = dados_SCPC[1]['Resumo Débitos']
@@ -210,6 +192,28 @@ else:
                 for x in range(5):
                     telegram_send('-')
                 print(msg_tele_serasa[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+        
+        else:
+            telegram_send(f'SCPC: {dados_SCPC[1]}')
+            print(dados_SCPC[1])
+            sheet.update_acell('G' + str(id_linha+1), dados_SCPC[1])
+            sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+
+            '''
+            elif dados_SCPC[0] == 'Erro 500':
+            
+            for i in range(5):
+                print(f'Tentativa de consulta: {i+1}')
+                telegram_send(f'Tentativa de consulta: {i+1}')
+                # dados = SCPC_result(solicitante,cpf)
+                if i == 5:
+                    print(f'Tentativas excedidas: Favor contatar o Brian')
+                    telegram_send(f'Tentativas excedidas: Favor contatar o Brian')
+                    exit()
+                else:
+                    if dados[0]:
+                        return dados
+            '''            
 
 end_msg = telegram_send('End check')
 telegram_delete(end_msg[1])
