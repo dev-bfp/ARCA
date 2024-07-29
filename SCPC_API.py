@@ -104,7 +104,7 @@ def SCPC_result(solicitante,cpf):
 
         return True, array
     elif dados_cpf[0] == 'Erro 500':
-        return False, dados_cpf[1]
+        return 'Erro 500', dados_cpf[1]
     else:
         return False, dados_cpf[1]
 

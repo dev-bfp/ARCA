@@ -54,8 +54,8 @@ def get_info_sheets():
     row = sheet.get_all_values()
     last_row = len(row)
     array = {}
-    for i in range(1,last_row):
-        array2 = []
+    for i in range(last_row-5,last_row):
+        print(sheet.acell('D'+str(i+1)).value)
         dados_zip = dict(zip(row[0],row[i]))
         if dados_zip['Resultado SCPC'] == '':
             dados_zip['ID Linha'] = i
@@ -193,27 +193,15 @@ else:
                     telegram_send('-')
                 print(msg_tele_serasa[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
         
+        elif dados_SCPC[0] == 'Erro 500':
+            telegram_send('Erro de processamento - favor aguardar nova tentativa')
+
         else:
             telegram_send(f'SCPC: {dados_SCPC[1]}')
             print(dados_SCPC[1])
             sheet.update_acell('G' + str(id_linha+1), dados_SCPC[1])
             sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
-            '''
-            elif dados_SCPC[0] == 'Erro 500':
-            
-            for i in range(5):
-                print(f'Tentativa de consulta: {i+1}')
-                telegram_send(f'Tentativa de consulta: {i+1}')
-                # dados = SCPC_result(solicitante,cpf)
-                if i == 5:
-                    print(f'Tentativas excedidas: Favor contatar o Brian')
-                    telegram_send(f'Tentativas excedidas: Favor contatar o Brian')
-                    exit()
-                else:
-                    if dados[0]:
-                        return dados
-            '''            
 
 end_msg = telegram_send('End check')
 telegram_delete(end_msg[1])
