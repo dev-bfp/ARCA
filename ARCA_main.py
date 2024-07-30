@@ -64,12 +64,12 @@ def get_info_sheets():
     #pprint.pp(array)
     return array if array else None
 
+# Print timestamp no console
+print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+
 # Coleta id do último timestamp e deleta
 id_tel = sheet.acell('L2').value
 telegram_delete(id_tel)
-
-# Print timestamp no console e envia pro telegram
-print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 
 # Insere timestamp e id do timestamp no sheets e também envia no telegram
 data_hora = datetime.today().strftime('%d/%m/%Y %H:%M:%S')
