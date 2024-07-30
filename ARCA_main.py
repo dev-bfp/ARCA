@@ -117,8 +117,9 @@ else:
             nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
             restricao = dados_SCPC[1]['Resumo Débitos']
             score = dados_SCPC[1]['Score']
-            valor_restricao = dados_SCPC[1]['Resumo Débitos'][2]['Valor_float']
-
+            try: valor_restricao = dados_SCPC[1]['Resumo Débitos'][2]['Valor_float']
+            except: valor_restricao = 0
+            
             if restricao[0] == True:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                 resultado = restricao[1]
