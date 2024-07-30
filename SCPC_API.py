@@ -84,7 +84,8 @@ def SCPC_result(solicitante,cpf):
             resumo_debitos = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']['SPCA-108-DEBITO']['SPCA-108-RESUMO']
             dados_debitos['Total de Registros'] = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-DEVEDOR']
             valor_total = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR'].replace(',','.')
-            dados_debitos['Valor_float'] = float(valor_total)
+            try: dados_debitos['Valor_float'] = float(valor_total)
+            except: dados_debitos['Valor_float'] = 0
             locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
             try: valor_formatado = locale.currency(float(valor_total), grouping=True)
             except: valor_formatado = valor_total
