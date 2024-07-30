@@ -117,6 +117,7 @@ else:
             nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
             restricao = dados_SCPC[1]['Resumo Débitos']
             score = dados_SCPC[1]['Score']
+            valor_restricao = dados_SCPC[1]['Resumo Débitos'][2]['Valor_float']
 
             if restricao[0] == True:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
@@ -145,7 +146,7 @@ else:
             print(msg_SCPC)
             telegram_send(msg_SCPC)
 
-            if restricao[0] == False:
+            if restricao[0] == False or valor_restricao < 300:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
                 dados_Serasa = serasa_result(CPF)
