@@ -47,6 +47,23 @@ def telegram_delete(id):
             return f"Not deleted  -  {res['description']}"
 
 
+def score_rating(score):
+    if score >= 800:
+        return 'Excelente 🟩'
+    elif 740 <= score <= 799:
+        return 'Muito bom 🟩'
+    elif 670 <= score <= 739:
+        return 'Bom 🟨'
+    elif 580 <= score <= 669:
+        return 'Razoável 🟧'
+    elif 300 <= score <= 579:
+        return 'Ruim 🟥'
+    elif score < 300:
+        return 'Muito Ruim ⚠️'
+    else:
+        return '-'
+
+
 def get_info_sheets():
     row = sheet.get_all_values()
     last_row = len(row)
@@ -60,6 +77,8 @@ def get_info_sheets():
 
     #pprint.pp(array)
     return array if array else None
+
+
 
 # Print timestamp no console
 print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
@@ -117,7 +136,7 @@ else:
             except: score = dados_SCPC[1]['Score']
             try: valor_restricao = dados_SCPC[1]['Resumo Débitos'][2]['Valor_float']
             except: valor_restricao = 0
-            
+
             if restricao[0] == True:
                 result_SCPC = '🚫🚫🚫 Com restrição 🚫🚫🚫'
                 resultado = restricao[1]
@@ -127,19 +146,19 @@ else:
                 result_SCPC = '✅✅✅ Sem restrição ✅✅✅'
                 resultado = ''
                 resumo_restri = result_SCPC
-
+            score2 = f'{score} - {score_rating(score)}'
             sheet.update_acell('D' + str(id_linha+1), nome_cliente)
             sheet.update_acell('E' + str(id_linha+1), data_nasc_SCPC)
             sheet.update_acell('G' + str(id_linha+1), resumo_restri)
             sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-            sheet.update_acell('K' + str(id_linha+1), score)
+            sheet.update_acell('K' + str(id_linha+1), score2)
 
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
                         "Cliente: *" + nome_cliente + "*" + "\n" +
                         "CPF: " + CPF + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
-                        "Score: " + score + "\n" +
+                        "Score: " + score2 + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)
             print(msg_SCPC)
