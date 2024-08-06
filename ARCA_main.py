@@ -139,7 +139,7 @@ else:
                         "Cliente: *" + nome_cliente + "*" + "\n" +
                         "CPF: " + CPF + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
-                        "Score: " + int(score) + "\n" +
+                        "Score: " + score + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)
             print(msg_SCPC)
