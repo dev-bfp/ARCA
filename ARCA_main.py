@@ -6,9 +6,8 @@ by: dev-bfp
 import time
 import datetime
 import requests
-import pprint
+from pprint import pp as pp
 import gspread # LIB DO GOOGLE SHEETS
-import pprint
 from oauth2client.service_account import ServiceAccountCredentials # LIB DE AUTENTICAÇÃO DA GOOGLE
 from datetime import datetime
 from Tokens import *
@@ -25,8 +24,6 @@ client = gspread.authorize(credentials_google)
 nmSheets = "Vendas Automaticas"
 sheet = client.open(nmSheets).worksheet("Consulta de CPF")
 
-def pp(*args):
-    pprint.pp(args)
     
 def telegram_send(bot_message):
     send_text = 'https://api.telegram.org/bot' + bot_token3 + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
@@ -116,7 +113,8 @@ else:
             data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
             nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
             restricao = dados_SCPC[1]['Resumo Débitos']
-            score = dados_SCPC[1]['Score']
+            try: score = int(dados_SCPC[1]['Score'])
+            except: score = dados_SCPC[1]['Score']
             try: valor_restricao = dados_SCPC[1]['Resumo Débitos'][2]['Valor_float']
             except: valor_restricao = 0
             
@@ -141,7 +139,7 @@ else:
                         "Cliente: *" + nome_cliente + "*" + "\n" +
                         "CPF: " + CPF + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
-                        "Score: " + score + "\n" +
+                        "Score: " + int(score) + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)
             print(msg_SCPC)
