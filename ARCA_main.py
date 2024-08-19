@@ -125,13 +125,14 @@ else:
 
         # Inicia consulta no SCPC
         dados_SCPC = SCPC_result(solicitante,CPF)
-        
+       
         # processa informações da consulta
         if dados_SCPC[0] == True: # Validação do status da consulta
             # separar def
             data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
             nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
             restricao = dados_SCPC[1]['Resumo Débitos']
+            cod_resposta = dados_SCPC[1]['Código de resposta']
             try: score = int(dados_SCPC[1]['Score'])
             except: score = dados_SCPC[1]['Score']
             try: valor_restricao = dados_SCPC[1]['Resumo Débitos'][2]['Valor_float']
@@ -158,6 +159,7 @@ else:
                         "Cliente: *" + nome_cliente + "*" + "\n" +
                         "CPF: " + CPF + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
+                        "Código resposta: " + cod_resposta + "\n" +
                         "Score: " + score2 + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
                         resultado)

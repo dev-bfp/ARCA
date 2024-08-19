@@ -21,7 +21,7 @@ def get_info_serasa_CPF(CPF):
             'tipodocumento': 'F',
             'documento': CPF,
             'estatica': 'N', # S = Consulta estática (simulação) | N = Consulta real
-            'tiporesposta': 'J',
+            'tiporesposta': 'A',
             'agregados': ''}
   
   response = requests.request("POST", url, headers=headers, data=payload)
@@ -52,7 +52,9 @@ def serasa_result(CPF):
       resumo = msg_resumo = (f"Foram encontrados {array['Quantidade de Ocorrências']} registros no valor total de {array['Valor Total']}") 
       array['Resumo'] = resumo
     
-    return True, array
+    return True, array, dados_serasa
   else:
       print('Serasa: ', dados_serasa['status']['mensagem'])
       return False, 'Serasa: ' + dados_serasa['status']['mensagem']
+
+
