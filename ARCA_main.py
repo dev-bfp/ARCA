@@ -34,6 +34,8 @@ def telegram_send(bot_message):
         return f'Mensagem enviada: {status_msg}  -  Mensagem ID:',res['result']['message_id'],bot_message
     else:
         return 0
+    # -------------------- End --------------------
+
 
 def telegram_delete(id):
     if id != 0:
@@ -45,6 +47,7 @@ def telegram_delete(id):
             return f"Mensagem apagada: {status_msg}"
         else:
             return f"Not deleted  -  {res['description']}"
+    # -------------------- End --------------------
 
 
 def score_rating(score):
@@ -62,6 +65,7 @@ def score_rating(score):
         return 'Muito Ruim ⚠️'
     else:
         return '-'
+    # -------------------- End --------------------
 
 
 def get_info_sheets():
@@ -77,8 +81,14 @@ def get_info_sheets():
 
     #pprint.pp(array)
     return array if array else None
+    # -------------------- End --------------------
 
 
+def create_html(name,data):
+    with open(f'xml_consultas/{name}.html','w+') as archive:
+        archive.write(str(data))
+
+    # -------------------- End --------------------
 
 # Print timestamp no console
 print('Starting',datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
@@ -170,6 +180,9 @@ else:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
                 dados_Serasa = serasa_result(CPF)
+                agora = datetime.today().strftime('%d-%m-%Y %H_%M_%S')
+                try: create_html(f'{CPF} - {agora}', dados_Serasa[2]['respostaHtml'])
+                except: pass
                 pp(dados_Serasa)
                 telegram_delete(msg_tele_serasa[1])
                 if dados_Serasa[0]:
