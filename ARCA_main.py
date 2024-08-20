@@ -183,7 +183,9 @@ else:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
                 dados_Serasa = serasa_result(CPF)
-                create_html(str(CPF), dados_Serasa[2]['respostaHtml'])
+                nome = f'{dados_Serasa[1]['Nome Consultado']} - {CPF}'
+                dados_html = dados_Serasa[2]['respostaHtml']
+                create_html(nome, dados_html)
                 pp(dados_Serasa)
                 telegram_delete(msg_tele_serasa[1])
                 if dados_Serasa[0]:
