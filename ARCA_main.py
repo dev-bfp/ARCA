@@ -84,9 +84,10 @@ def get_info_sheets():
     # -------------------- End --------------------
 
 
-def create_html(name,data):
+def create_html(name, data):
+    # Create a HTML file
     agora = datetime.today().strftime('%d-%m-%Y__%H_%M_%S')
-    with open(f'xml_consultas/{name + '-' + agora}.html', 'w+') as archive:
+    with open(f'xml_consultas/{name} - {agora}.html', 'w+') as archive:
         archive.write(str(data))
 
     # -------------------- End --------------------
