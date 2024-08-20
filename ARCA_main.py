@@ -87,7 +87,8 @@ def get_info_sheets():
 def create_html(name, data):
     # Create a HTML file
     agora = datetime.today().strftime('%d-%m-%Y__%H_%M_%S')
-    with open(f'xml_consultas/{name} - {agora}.html', 'w+') as archive:
+    diretory = r"C:\Users\DEV\Documents\GitHub\ARCA\xml_consultas"
+    with open(f'{diretory}/{name} - {agora}.html', 'w+') as archive:
         archive.write(str(data))
 
     # -------------------- End --------------------

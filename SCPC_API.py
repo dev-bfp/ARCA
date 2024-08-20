@@ -1,6 +1,6 @@
 import requests
 import json
-from pprint import pp as pp
+from pprint import pp as
 import time
 import locale
 from Tokens import keys_scpc as kc
