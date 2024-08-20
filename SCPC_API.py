@@ -1,14 +1,11 @@
 import requests
 import json
-import pprint
+from pprint import pp as pp
 import time
 import locale
 from Tokens import keys_scpc as kc
 from Tokens import bot_token,bot_chatID
 
-def pp(*args):
-    pprint.pp(args)
-    
 
 def telegram_send(bot_message):
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
