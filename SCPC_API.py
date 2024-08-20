@@ -90,7 +90,7 @@ def SCPC_result(solicitante,cpf):
             except: valor_formatado = valor_total
             dados_debitos['Valor Total'] = valor_formatado
             
-            dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) #Data do primeiro débito
+            dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) # Data do primeiro débito
             dados_debitos['Data do Primeiro Débito'] = f'{dpd[6:8]}/{dpd[4:6]}/{dpd[0:4]}' # Data do primeiro débito formatado
             dud = str(resumo_debitos['SPCA-108-MAIOR-DEB']['SPCA-108-M-DATA']) # Data do último débito
             dados_debitos['Data do Último Débito'] = f'{dud[6:8]}/{dud[4:6]}/{dud[0:4]}' # Data do último débito formatado

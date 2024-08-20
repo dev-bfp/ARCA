@@ -85,7 +85,8 @@ def get_info_sheets():
 
 
 def create_html(name,data):
-    with open(f'xml_consultas/{name}.html','w+') as archive:
+    agora = datetime.today().strftime('%d-%m-%Y__%H_%M_%S')
+    with open(f'xml_consultas/{name + '-' + agora}.html', 'w+') as archive:
         archive.write(str(data))
 
     # -------------------- End --------------------
@@ -180,9 +181,7 @@ else:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
                 dados_Serasa = serasa_result(CPF)
-                agora = datetime.today().strftime('%d-%m-%Y %H_%M_%S')
-                try: create_html(f'{CPF} - {agora}', dados_Serasa[2]['respostaHtml'])
-                except: pass
+                create_html(str(CPF), dados_Serasa[2]['respostaHtml'])
                 pp(dados_Serasa)
                 telegram_delete(msg_tele_serasa[1])
                 if dados_Serasa[0]:
