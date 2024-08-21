@@ -85,9 +85,10 @@ def get_info_sheets():
 
 
 def format_name(name):
-    word_ignore = {'das', 'dos', 'a', 'da', 'de', 'do', 'e'}
+    word_ignoradas = {'DAS', 'DOS', 'A', 'DA', 'DE', 'DO', 'E',}
     words = name.split()
-    formated_name = [word if word in word_ignore else word.capitalize()
+    formated_name = [word.lower() if word in word_ignoradas
+                     else word.capitalize()
                      for word in words]
     formated_names = " ".join(formated_name)
     return formated_names
