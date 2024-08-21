@@ -72,7 +72,7 @@ def get_info_sheets():
     row = sheet.get_all_values()
     last_row = len(row)
     array = {}
-    for i in range(last_row-5,last_row):
+    for i in range(last_row-10,last_row):
         print(sheet.acell('D'+str(i+1)).value)
         dados_zip = dict(zip(row[0],row[i]))
         if dados_zip['Resultado SCPC'] == '':
@@ -83,15 +83,34 @@ def get_info_sheets():
     return array if array else None
     # -------------------- End --------------------
 
+def telegram_files(file_path):
+    '''Send files to Telegram'''
+    url = f'https://api.telegram.org/bot{bot_token}/sendDocument'
+
+    with open(file_path, 'rb') as file:
+        files = {'document': file}
+        data = {'chat_id': bot_chatID}
+        response = requests.post(url, data=data, files=files)
+
+    if response.status_code == 200:
+        print('Arquivo enviado com sucesso!')
+    else:
+        print(f'Falha ao enviar arquivo. Status: {response.status_code}')
+    
+    # -------------------- End --------------------
+
 
 def create_html(name, data):
     # Create a HTML file
     agora = datetime.today().strftime('%d-%m-%Y__%H_%M_%S')
-    diretory = r"C:\Users\DEV\OneDrive\ARCA\html_consultas"
-    #diretory = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\html_consultas"
-    with open(f'{diretory}/{name} - {agora}.html', 'w+') as archive:
+    dir_path = r"C:\Users\DEV\OneDrive\ARCA\html_consultas"
+    #dir_path = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\html_consultas"
+    diretory = f'{dir_path}/{name} - {agora}.html'
+    with open(diretory, 'w') as archive:
         archive.write(str(data))
 
+    telegram_files(diretory)
+        
     # -------------------- End --------------------
 
 # Print timestamp no console
@@ -122,7 +141,7 @@ if dados_sheets is None:
 else:
     # formata dados do GSheets
     for x in dados_sheets.items():
-        CPF = x[0]
+        cpf = x[0]
         solicitante = x[1]['Solicitante']
         cliente = x[1]['Nome Cliente']
         data_nascimento = x[1]['Data de Nascimento']
@@ -132,13 +151,13 @@ else:
                         "Solicitante: " + solicitante + "\n" +
                         "Cliente: " + cliente + "\n" +
                         "Data de Nascimento: " + data_nascimento + "\n" +
-                        "CPF: " + CPF)
+                        "CPF: " + cpf)
         print(msg_consult)
         telegram_send(msg_consult)
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
 
         # Inicia consulta no SCPC
-        dados_SCPC = SCPC_result(solicitante,CPF)
+        dados_SCPC = SCPC_result(solicitante,cpf)
        
         # processa informações da consulta
         if dados_SCPC[0] == True: # Validação do status da consulta
@@ -171,7 +190,7 @@ else:
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
                         "Cliente: *" + nome_cliente + "*" + "\n" +
-                        "CPF: " + CPF + "\n" +
+                        "CPF: " + cpf + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Código resposta: " + cod_resposta + "\n" +
                         "Score: " + score2 + "\n" +
@@ -183,12 +202,8 @@ else:
             if restricao[0] == False or valor_restricao < 300:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
-                dados_Serasa = serasa_result(CPF)
-                nome_consultado = dados_Serasa[1]['Nome Consultado']
-                title_doc = f'{nome_consultado} - {CPF}'
-                dados_html = dados_Serasa[2]['respostaHtml']
-                create_html(title_doc, dados_html)
-                pp(dados_Serasa)
+                dados_Serasa = serasa_result(cpf)
+                #pp(dados_Serasa)
                 telegram_delete(msg_tele_serasa[1])
                 if dados_Serasa[0]:
                     if dados_Serasa[1]['Status Restrição'] == 'Constam Restrições':
@@ -221,6 +236,11 @@ else:
                     sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 
+                nome_consultado = dados_Serasa[1]['Nome Consultado']
+                title_doc = f'{nome_consultado} - {cpf}'
+                dados_html = dados_Serasa[2]['respostaHtml']
+                create_html(title_doc, dados_html)
+
                 msg_tele_serasa = telegram_send('Fim da consulta')
                 for x in range(5):
                     telegram_send('-')
