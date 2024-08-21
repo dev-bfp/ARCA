@@ -88,6 +88,7 @@ def create_html(name, data):
     # Create a HTML file
     agora = datetime.today().strftime('%d-%m-%Y__%H_%M_%S')
     diretory = r"C:\Users\DEV\OneDrive\ARCA\html_consultas"
+    #diretory = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\html_consultas"
     with open(f'{diretory}/{name} - {agora}.html', 'w+') as archive:
         archive.write(str(data))
 
