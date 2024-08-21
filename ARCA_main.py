@@ -184,7 +184,8 @@ else:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
                 dados_Serasa = serasa_result(CPF)
-                title_doc = f'{dados_Serasa[1]['Nome Consultado']} - {CPF}'
+                nome_consultado = dados_Serasa[1]['Nome Consultado']
+                title_doc = f'{nome_consultado} - {CPF}'
                 dados_html = dados_Serasa[2]['respostaHtml']
                 create_html(title_doc, dados_html)
                 pp(dados_Serasa)
