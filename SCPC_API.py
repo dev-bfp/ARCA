@@ -64,6 +64,7 @@ def SCPC_result(solicitante,cpf):
     dados_cpf = get_info_SCPC_CPF(solicitante,cpf)
     if dados_cpf[0] == True:
         array = {}
+        array['Retorno JSON'] = dados_cpf[1]
         array['Código de resposta'] = dados_cpf[1]['SPCA-XML']['RESPOSTA']['NUMERO-RESPOSTA']
         matriz = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']
         array['Cadastro'] = matriz['SPCA-500-IDENTIFICA']
