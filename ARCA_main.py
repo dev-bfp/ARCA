@@ -83,6 +83,17 @@ def get_info_sheets():
     return array if array else None
     # -------------------- End --------------------
 
+
+def format_name(name):
+    word_ignore = {'das', 'dos', 'a', 'da', 'de', 'do', 'e'}
+    words = name.split()
+    formated_name = [word if word in word_ignore else word.capitalize()
+                     for word in words]
+    formated_names = " ".join(formated_name)
+    return formated_names
+    # -------------------- End --------------------
+
+
 def telegram_files(file_path):
     '''Send files to Telegram'''
     url = f'https://api.telegram.org/bot{bot_token}/sendDocument'
@@ -163,7 +174,7 @@ else:
         if dados_SCPC[0] == True: # Validação do status da consulta
             # separar def
             data_nasc_SCPC = dados_SCPC[1]['Cadastro']['SPCA-500-NASC']
-            nome_cliente = dados_SCPC[1]['Cadastro']['SPCA-500-NOME']
+            nome_cliente = format_name(dados_SCPC[1]['Cadastro']['SPCA-500-NOME'])
             restricao = dados_SCPC[1]['Resumo Débitos']
             cod_resposta = dados_SCPC[1]['Código de resposta']
             try: score = int(dados_SCPC[1]['Score'])
@@ -236,8 +247,7 @@ else:
                     sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 
-                nome_consultado = dados_Serasa[1]['Nome Consultado']
-                title_doc = f'{nome_consultado} - {cpf}'
+                title_doc = f'{nome_cliente} - {cpf}'
                 dados_html = dados_Serasa[2]['respostaHtml']
                 create_html(title_doc, dados_html)
 
