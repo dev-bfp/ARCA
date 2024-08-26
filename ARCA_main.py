@@ -114,7 +114,7 @@ def telegram_files(file_path):
 
 def create_html(name, data):
     # Create a HTML file
-    agora = datetime.today().strftime('%d-%m-%Y %H.%M')
+    agora = datetime.today().strftime('%d-%m-%Y %H %M')
     dir_path = r"C:\Users\DEV\OneDrive\ARCA\html_consultas"
     #dir_path = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\html_consultas"
     diretory = f'{dir_path}/{name} {agora}.html'
