@@ -114,10 +114,10 @@ def telegram_files(file_path):
 
 def create_html(name, data):
     # Create a HTML file
-    agora = datetime.today().strftime('%d-%m-%Y__%H_%M_%S')
+    agora = datetime.today().strftime('%d-%m-%Y %H.%M')
     dir_path = r"C:\Users\DEV\OneDrive\ARCA\html_consultas"
     #dir_path = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\html_consultas"
-    diretory = f'{dir_path}/{name} - {agora}.html'
+    diretory = f'{dir_path}/{name} {agora}.html'
     with open(diretory, 'w') as archive:
         archive.write(str(data))
 
@@ -249,7 +249,7 @@ else:
                     sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 
-                title_doc = f'{nome_cliente} - {cpf}'
+                title_doc = f'Serasa - {nome_cliente} - {cpf}'
                 dados_html = dados_Serasa[2]['respostaHtml']
                 create_html(title_doc, dados_html)
 
