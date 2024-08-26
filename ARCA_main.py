@@ -249,7 +249,7 @@ else:
                     sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
                     sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                 
-                title_doc = f'Serasa - {nome_cliente} - {cpf}'
+                title_doc = f'Serasa {nome_cliente} {cpf}'
                 dados_html = dados_Serasa[2]['respostaHtml']
                 create_html(title_doc, dados_html)
 
