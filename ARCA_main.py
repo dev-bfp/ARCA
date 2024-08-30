@@ -55,11 +55,11 @@ def score_rating(score):
         return 'Excelente 🟩'
     elif 740 <= score <= 799:
         return 'Muito bom 🟩'
-    elif 670 <= score <= 739:
+    elif 600 <= score <= 739:
         return 'Bom 🟨'
-    elif 580 <= score <= 669:
-        return 'Razoável 🟧'
-    elif 300 <= score <= 579:
+    elif 450 <= score <= 559:
+        return 'Razoável 🟨'
+    elif 300 <= score <= 449:
         return 'Ruim 🟥'
     elif score < 300:
         return 'Muito Ruim ⚠️'
@@ -211,7 +211,7 @@ else:
             print(msg_SCPC)
             telegram_send(msg_SCPC)
 
-            if restricao[0] == False or valor_restricao < 300:
+            if restricao[0] == False or valor_restricao < 500:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
                 dados_Serasa = serasa_result(cpf)
