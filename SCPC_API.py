@@ -1,11 +1,20 @@
 import requests
+import datetime
 import json
+from datetime import datetime
 from pprint import pp as pp
 import time
 import locale
 from Tokens import keys_scpc as kc
 from Tokens import bot_token,bot_chatID
 
+def create_json(name, data):
+    agora = datetime.now().strftime('%d-%m-%Y %H %M')
+    dir_path = r"C:\Users\DEV\OneDrive\ARCA\logs_json"
+    #dir_path = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\logs_json"
+    diretory = f'{dir_path}/SCPC-{name} {agora}.json'
+    with open(diretory, 'w') as archive:
+        json.dump(data,archive,indent=4)
 
 def telegram_send(bot_message):
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
@@ -69,6 +78,7 @@ def SCPC_result(solicitante,cpf):
         matriz = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']
         array['Cadastro'] = matriz['SPCA-500-IDENTIFICA']
         dt_nas = str(array['Cadastro']['SPCA-500-NASC'])
+        nome_cliente = str(array['Cadastro']['SPCA-500-NOME'])
         array['Cadastro']['SPCA-500-NASC'] = f'{dt_nas[6:8]}/{dt_nas[4:6]}/{dt_nas[0:4]}'
         
         score = matriz['SPCA-601-SCORE-CRED']
@@ -100,7 +110,8 @@ def SCPC_result(solicitante,cpf):
             
         except:
             array['Resumo Débitos'] = False,'Sem restrição'
-
+        try: create_json(nome_cliente, dados_cpf)
+        except: pass
         return True, array
     elif dados_cpf[0] == 'Erro 500':
         return 'Erro 500', dados_cpf[1]

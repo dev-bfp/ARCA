@@ -112,7 +112,7 @@ def telegram_files(file_path):
     # -------------------- End --------------------
 
 
-def create_html(name, data):
+def create_json(name, data):
     # Create a HTML file
     agora = datetime.today().strftime('%d-%m-%Y %H %M')
     dir_path = r"C:\Users\DEV\OneDrive\ARCA\html_consultas"
@@ -251,7 +251,7 @@ else:
                 
                 title_doc = f'Serasa {nome_cliente} {cpf}'
                 dados_html = dados_Serasa[2]['respostaHtml']
-                create_html(title_doc, dados_html)
+                create_json(title_doc, dados_html)
 
                 msg_tele_serasa = telegram_send('Fim da consulta')
                 for x in range(5):
