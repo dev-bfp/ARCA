@@ -23,7 +23,7 @@ client = gspread.authorize(credentials_google)
 #nmSheets = "VENDAS REDFIBRA"
 nmSheets = "Vendas Automaticas"
 sheet = client.open(nmSheets).worksheet("Consulta de CPF")
-#1
+
     
 def telegram_send(bot_message):
     send_text = 'https://api.telegram.org/bot' + bot_token3 + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
