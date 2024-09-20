@@ -2,6 +2,7 @@
 Tokens.py
 Telegram_API.py
 Apresentação_ARCA.pptx
+/__pycache__/
 /shelf/
 /logs_json/
 /html_consultas/
