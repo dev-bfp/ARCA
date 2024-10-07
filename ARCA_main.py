@@ -214,48 +214,52 @@ else:
             if restricao[0] == False or valor_restricao < 500:
                 msg_tele_serasa = telegram_send('🔎 Consultando Serasa...')
                 print('Inicia Serasa')
-                dados_Serasa = serasa_result(cpf)
-                #pp(dados_Serasa)
-                telegram_delete(msg_tele_serasa[1])
+                try:
+                    dados_Serasa = serasa_result(cpf)
+                    #pp(dados_Serasa)
+                    telegram_delete(msg_tele_serasa[1])
 
-                if dados_Serasa[0]:
-                    if dados_Serasa[1]['Status Restrição'] == 'Constam Restrições':
-                        result_serasa = '🚫🚫🚫 Com restrição 🚫🚫🚫'
-                        resumo_serasa = dados_Serasa[1]['Resumo']
-                        rs = resumo_serasa.split(' ')
-                        resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[9]}'
+                    if dados_Serasa[0]:
+                        if dados_Serasa[1]['Status Restrição'] == 'Constam Restrições':
+                            result_serasa = '🚫🚫🚫 Com restrição 🚫🚫🚫'
+                            resumo_serasa = dados_Serasa[1]['Resumo']
+                            rs = resumo_serasa.split(' ')
+                            resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[9]}'
 
-                    else:
-                        result_serasa = '✅✅✅ Sem restrição ✅✅✅'
-                        resumo_serasa = ''
-                        resumo_restri_serasa = result_serasa
+                        else:
+                            result_serasa = '✅✅✅ Sem restrição ✅✅✅'
+                            resumo_serasa = ''
+                            resumo_restri_serasa = result_serasa
+                            
+                        nome_cliente_serasa = format_name(dados_Serasa[1]['Nome Consultado'])
+                        msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
+                                "Cliente: *" + nome_cliente_serasa + "*" + "\n" +
+                                "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
+                                "Protocolo: " + dados_Serasa[1]['Protocolo'] + "\n" +
+                                "Resultado: " + result_serasa + "\n" + "\n" +
+                                resumo_serasa)
                         
-                    nome_cliente_serasa = format_name(dados_Serasa[1]['Nome Consultado'])
-                    msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
-                            "Cliente: *" + nome_cliente_serasa + "*" + "\n" +
-                            "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
-                            "Protocolo: " + dados_Serasa[1]['Protocolo'] + "\n" +
-                            "Resultado: " + result_serasa + "\n" + "\n" +
-                            resumo_serasa)
+                        print(msg_Serasa)
+                        telegram_send(msg_Serasa)
+                        sheet.update_acell('I' + str(id_linha+1), resumo_restri_serasa)
+                        sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                        print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                    else:
+                        print('Serasa: ' + dados_Serasa[1])
+                        telegram_send(dados_Serasa[1])
+                        sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
+                        sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
                     
-                    print(msg_Serasa)
-                    telegram_send(msg_Serasa)
-                    sheet.update_acell('I' + str(id_linha+1), resumo_restri_serasa)
-                    sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-                    print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-                else:
-                    print('Serasa: ' + dados_Serasa[1])
-                    telegram_send(dados_Serasa[1])
-                    sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
-                    sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-                
-                title_doc = f'Serasa {nome_cliente} {cpf}'
-                dados_html = dados_Serasa[2]['respostaHtml']
-                create_json(title_doc, dados_html)
+                    title_doc = f'Serasa {nome_cliente} {cpf}'
+                    dados_html = dados_Serasa[2]['respostaHtml']
+                    create_json(title_doc, dados_html)
 
-                msg_tele_serasa = telegram_send('Fim da consulta')
-                for x in range(5):
-                    telegram_send('-')
+                    msg_tele_serasa = telegram_send('Fim da consulta')
+                    for x in range(5):
+                        telegram_send('-')
+                
+                except:
+                    telegram_delete('Erro na consulta ao Serasa')
                     
             else:
                 sheet.update_acell('I' + str(id_linha+1), 'Restrição no SCPC')

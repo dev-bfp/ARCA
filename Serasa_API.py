@@ -34,6 +34,7 @@ def get_info_serasa_CPF(CPF):
   
   response = requests.request("POST", url, headers=headers, data=payload)
   dados = response.json()
+  pp(dados)
   return dados
 
 def serasa_result(CPF):
@@ -66,4 +67,5 @@ def serasa_result(CPF):
   else:
       print('Serasa: ', dados_serasa['status']['mensagem'])
       return False, 'Serasa: ' + dados_serasa['status']['mensagem']
+
 
