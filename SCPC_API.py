@@ -117,3 +117,8 @@ def SCPC_result(solicitante,cpf):
         return 'Erro 500', dados_cpf[1]
     else:
         return False, dados_cpf[1]
+
+
+if __name__ == '__main__':
+    # Insira o código de teste aqui
+    ...
