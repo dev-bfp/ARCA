@@ -78,7 +78,7 @@ def SCPC_result(solicitante,cpf):
         matriz = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']
         array['Cadastro'] = matriz['SPCA-500-IDENTIFICA']
         try: dt_nas = str(array['Cadastro']['SPCA-500-NASC'])
-        except: dt_nas = "2000-01-01"
+        except: dt_nas = "00000000000"
         nome_cliente = str(array['Cadastro']['SPCA-500-NOME'])
         array['Cadastro']['SPCA-500-NASC'] = f'{dt_nas[6:8]}/{dt_nas[4:6]}/{dt_nas[0:4]}'
         
