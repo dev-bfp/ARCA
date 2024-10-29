@@ -235,7 +235,7 @@ else:
                     
                         msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
                                 "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
-                                "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
+                                "CPF: " + cpf + "\n" +
                                 "Resultado: " + result_serasa + "\n" + "\n" +
                                 resumo_serasa)
                         print(msg_Serasa)
