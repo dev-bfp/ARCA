@@ -166,7 +166,7 @@ else:
                         "Solicitante: " + solicitante + "\n" +
                         "Cliente: " + cliente + "\n" +
                         "Data de Nascimento: " + data_nascimento + "\n" +
-                        "CPF: " + cpf)
+                        "CPF: " + cpf_formated)
         print(msg_consult)
         telegram_send(msg_consult)
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
@@ -204,7 +204,7 @@ else:
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
                         "Cliente: " + nome_cliente + "\n" +
-                        "CPF: " + cpf + "\n" +
+                        "CPF: " + cpf_formated + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Código resposta: " + cod_resposta + "\n" +
                         "Score: " + score2 + "\n" +
@@ -235,7 +235,7 @@ else:
                     
                         msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
                                 "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
-                                "CPF: " + cpf + "\n" +
+                                "CPF: " + cpf_formated + "\n" +
                                 "Resultado: " + result_serasa + "\n" + "\n" +
                                 resumo_serasa)
                         print(msg_Serasa)
