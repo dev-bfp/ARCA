@@ -93,9 +93,10 @@ else:
                         "Solicitante: " + solicitante + "\n" +
                         "Cliente: " + cliente + "\n" +
                         "Data de Nascimento: " + data_nascimento + "\n" +
-                        "CPF: " + CPF)
+                        "CPF: " + CPF[:3]+"***"+CPF[6:])
         print(msg_consult)
         telegram_send(msg_consult)
+        '''
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
         dados_SCPC = SCPC_result(solicitante,CPF)
         
@@ -141,7 +142,7 @@ else:
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
                         "Cliente: " + nome_cliente + "\n" +
-                        "CPF: " + CPF + "\n" +
+                        "CPF: " + CPF[:3]+"***"+CPF[6:] + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Score: " + score + "\n" +
                         "Resultado: " + result_SCPC + "\n" + "\n" +
@@ -167,7 +168,7 @@ else:
                     
                     msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
                             "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
-                            "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
+                            "CPF: " + CPF[:3]+"***"+CPF[6:] + "\n" +
                             "Resultado: " + result_serasa + "\n" + "\n" +
                             resumo_serasa)
                     print(msg_Serasa)
@@ -192,7 +193,7 @@ else:
     print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
     telegram_delete(end_msg[1])
     exit()
-
+    '''
        
       
     
