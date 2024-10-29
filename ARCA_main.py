@@ -204,7 +204,7 @@ else:
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
                         "Cliente: " + nome_cliente + "\n" +
-                        "CPF: " + CPF + "\n" +
+                        "CPF: " + cpf + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Código resposta: " + cod_resposta + "\n" +
                         "Score: " + score2 + "\n" +
