@@ -228,35 +228,35 @@ else:
                             rs = resumo_serasa.split(' ')
                             resumo_restri_serasa = result_serasa + '\n' + f'{rs[2]} registro(s) - valor total {rs[9]}'
 
-                    else:
-                        result_serasa = '✅✅✅ Sem restrição ✅✅✅'
-                        resumo_serasa = ''
+                        else:
+                            result_serasa = '✅✅✅ Sem restrição ✅✅✅'
+                            resumo_serasa = ''
                         
                     
-                    msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
-                            "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
-                            "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
-                            "Resultado: " + result_serasa + "\n" + "\n" +
-                            resumo_serasa)
-                    print(msg_Serasa)
-                    telegram_send(msg_Serasa)
-                    telegram_send('-')
-                    sheet.update_acell('I' + str(id_linha+1), result_serasa)
-                    sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-                    print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-                else:
-                    print('Serasa: ' + dados_Serasa[1])
-                    telegram_send(dados_Serasa[1])
-                    sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
-                    sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
-                    
-                    title_doc = f'Serasa {nome_cliente} {cpf}'
-                    dados_html = dados_Serasa[2]['respostaHtml']
-                    create_json(title_doc, dados_html)
-
-                    msg_tele_serasa = telegram_send('Fim da consulta')
-                    for x in range(5):
+                        msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
+                                "Cliente: " + dados_Serasa[1]['Nome Consultado'] + "\n" +
+                                "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
+                                "Resultado: " + result_serasa + "\n" + "\n" +
+                                resumo_serasa)
+                        print(msg_Serasa)
+                        telegram_send(msg_Serasa)
                         telegram_send('-')
+                        sheet.update_acell('I' + str(id_linha+1), result_serasa)
+                        sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                        print(datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                    else:
+                        print('Serasa: ' + dados_Serasa[1])
+                        telegram_send(dados_Serasa[1])
+                        sheet.update_acell('I' + str(id_linha+1), dados_Serasa[1])
+                        sheet.update_acell('J' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+                        
+                        title_doc = f'Serasa {nome_cliente} {cpf}'
+                        dados_html = dados_Serasa[2]['respostaHtml']
+                        create_json(title_doc, dados_html)
+
+                        msg_tele_serasa = telegram_send('Fim da consulta')
+                        for x in range(5):
+                            telegram_send('-')
                 
                 except:
                     telegram_delete('Erro na consulta ao Serasa')
