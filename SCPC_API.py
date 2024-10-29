@@ -1,13 +1,20 @@
 import requests
+import datetime
 import json
-import pprint
+from datetime import datetime
+from pprint import pp as pp
 import time
+import locale
 from Tokens import keys_scpc as kc
 from Tokens import bot_token,bot_chatID
 
-def pp(*args):
-    pprint.pp(args)
-    
+def create_json(name, data):
+    agora = datetime.now().strftime('%d-%m-%Y %H %M')
+    dir_path = r"C:\Users\DEV\OneDrive\ARCA\logs_json"
+    #dir_path = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\logs_json"
+    diretory = f'{dir_path}/SCPC-{name} {agora}.json'
+    with open(diretory, 'w') as archive:
+        json.dump(data,archive,indent=4)
 
 def telegram_send(bot_message):
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
@@ -42,7 +49,7 @@ def get_info_SCPC_CPF(solicitante,cpf):
     
     response = requests.post(url, headers=headers, data=json.dumps(body))
     
-    if response.status_code == 200:
+    if response.status_code == 200 or 0:
         print('Consulta realizada')
         return True, response.json()
 
@@ -66,10 +73,13 @@ def SCPC_result(solicitante,cpf):
     dados_cpf = get_info_SCPC_CPF(solicitante,cpf)
     if dados_cpf[0] == True:
         array = {}
+        array['Retorno JSON'] = dados_cpf[1]
         array['Código de resposta'] = dados_cpf[1]['SPCA-XML']['RESPOSTA']['NUMERO-RESPOSTA']
         matriz = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']
         array['Cadastro'] = matriz['SPCA-500-IDENTIFICA']
-        dt_nas = str(array['Cadastro']['SPCA-500-NASC'])
+        try: dt_nas = str(array['Cadastro']['SPCA-500-NASC'])
+        except: dt_nas = "00000000000"
+        nome_cliente = str(array['Cadastro']['SPCA-500-NOME'])
         array['Cadastro']['SPCA-500-NASC'] = f'{dt_nas[6:8]}/{dt_nas[4:6]}/{dt_nas[0:4]}'
         
         score = matriz['SPCA-601-SCORE-CRED']
@@ -82,25 +92,34 @@ def SCPC_result(solicitante,cpf):
             dados_debitos = {}
             resumo_debitos = dados_cpf[1]['SPCA-XML']['RESPOSTA']['REGISTRO-ACSP-SPCA']['SPCA-108-DEBITO']['SPCA-108-RESUMO']
             dados_debitos['Total de Registros'] = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-DEVEDOR']
-            dados_debitos['Valor Total'] = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR']
+            valor_total = resumo_debitos['SPCA-108-TOTAL']['SPCA-108-VALOR'].replace(',','.')
+            dados_debitos['Valor_float'] = float(valor_total)
+            locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+            try: valor_formatado = locale.currency(float(valor_total), grouping=True)
+            except: valor_formatado = valor_total
+            dados_debitos['Valor Total'] = valor_formatado
             
-            dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) #Data do primeiro débito
+            dpd = str(resumo_debitos['SPCA-108-PRIMEIRO-DEB']['SPCA-108-P-DATA']) # Data do primeiro débito
             dados_debitos['Data do Primeiro Débito'] = f'{dpd[6:8]}/{dpd[4:6]}/{dpd[0:4]}' # Data do primeiro débito formatado
             dud = str(resumo_debitos['SPCA-108-MAIOR-DEB']['SPCA-108-M-DATA']) # Data do último débito
             dados_debitos['Data do Último Débito'] = f'{dud[6:8]}/{dud[4:6]}/{dud[0:4]}' # Data do último débito formatado
             
-            msg_resumo = (f"Foram encontrados {dados_debitos['Total de Registros']} registros no valor total de {dados_debitos['Valor Total']}" + "\n" +
+            msg_resumo = (f"Foram encontrados {dados_debitos['Total de Registros']} registros no valor total de {dados_debitos['Valor Total']} " + "\n" +
                           f"Primeira negativação em {dados_debitos['Data do Primeiro Débito']} e última negativação em {dados_debitos['Data do Último Débito']}")                       
 
             array['Resumo Débitos'] = True,msg_resumo, dados_debitos
             
         except:
             array['Resumo Débitos'] = False,'Sem restrição'
-
+        try: create_json(nome_cliente, dados_cpf)
+        except: pass
         return True, array
     elif dados_cpf[0] == 'Erro 500':
-        return False, dados_cpf[1]
+        return 'Erro 500', dados_cpf[1]
     else:
         return False, dados_cpf[1]
 
 
+if __name__ == '__main__':
+    # Insira o código de teste aqui
+    ...
