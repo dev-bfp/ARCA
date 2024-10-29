@@ -154,8 +154,11 @@ else:
     # formata dados do GSheets
     for x in dados_sheets.items():
         cpf = x[0]
+        print(cpf)
+        cpf_formated = x[0][:3] + '.$$$.' + x[0][6:9] + ".-$$"
         solicitante = x[1]['Solicitante']
-        cliente = x[1]['Nome Cliente']
+        cliente = x[1]['Nome Cliente'].split(" ")
+        cliente =  f"{cliente[0]} {cliente[-1][0]}"
         data_nascimento = x[1]['Data de Nascimento']
         id_linha = x[1]['ID Linha']
         
@@ -163,11 +166,12 @@ else:
                         "Solicitante: " + solicitante + "\n" +
                         "Cliente: " + cliente + "\n" +
                         "Data de Nascimento: " + data_nascimento + "\n" +
-                        "CPF: " + cpf)
+                        "CPF: " + cpf_formated)
         print(msg_consult)
-        telegram_send(msg_consult)
-        msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
+        print(telegram_send(msg_consult))
+        
 
+        msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
         # Inicia consulta no SCPC
         dados_SCPC = SCPC_result(solicitante,cpf)
        
@@ -201,8 +205,8 @@ else:
 
             telegram_delete(msg_tele_scpc[1])
             msg_SCPC = ("Consulta *1* de *2* - *SCPC*" + "\n" + "\n" +
-                        "Cliente: *" + nome_cliente + "*" + "\n" +
-                        "CPF: " + cpf + "\n" +
+                        "Cliente: *" + cliente + "*" + "\n" +
+                        "CPF: " + cpf_formated + "\n" +
                         "Data de Nascimento: " + data_nasc_SCPC + "\n" +
                         "Código resposta: " + cod_resposta + "\n" +
                         "Score: " + score2 + "\n" +
@@ -216,7 +220,7 @@ else:
                 print('Inicia Serasa')
                 try:
                     dados_Serasa = serasa_result(cpf)
-                    #pp(dados_Serasa)
+                    pp(dados_Serasa)
                     telegram_delete(msg_tele_serasa[1])
 
                     if dados_Serasa[0]:
@@ -233,8 +237,8 @@ else:
                             
                         nome_cliente_serasa = format_name(dados_Serasa[1]['Nome Consultado'])
                         msg_Serasa = ("Consulta *2* de *2* - *SERASA*" + "\n" + "\n" +
-                                "Cliente: *" + nome_cliente_serasa + "*" + "\n" +
-                                "CPF: " + dados_Serasa[1]['CPF'] + "\n" +
+                                "Cliente: *" + cliente + "*" + "\n" +
+                                "CPF: " + cpf + "\n" +
                                 "Protocolo: " + dados_Serasa[1]['Protocolo'] + "\n" +
                                 "Resultado: " + result_serasa + "\n" + "\n" +
                                 resumo_serasa)
@@ -283,8 +287,3 @@ end_msg = telegram_send('End check')
 telegram_delete(end_msg[1])
 print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
 exit()
-
-       
-      
-    
-
