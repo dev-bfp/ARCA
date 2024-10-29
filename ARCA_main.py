@@ -166,7 +166,7 @@ else:
                         "Solicitante: " + solicitante + "\n" +
                         "Cliente: " + cliente + "\n" +
                         "Data de Nascimento: " + data_nascimento + "\n" +
-                        "CPF: " + CPF)
+                        "CPF: " + cpf)
         print(msg_consult)
         telegram_send(msg_consult)
         msg_tele_scpc = telegram_send('🔎 Consultando SCPC...')
