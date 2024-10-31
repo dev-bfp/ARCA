@@ -158,7 +158,7 @@ else:
         cpf_formated = x[0][:3] + '.$$$.' + x[0][6:9] + ".-$$"
         solicitante = x[1]['Solicitante']
         cliente = x[1]['Nome Cliente'].split(" ")
-        cliente =  f"{cliente[0]} {cliente[-1][0]}"
+        cliente =  f"{cliente[0]} $$$$$$$$$$"
         data_nascimento = x[1]['Data de Nascimento']
         id_linha = x[1]['ID Linha']
         
