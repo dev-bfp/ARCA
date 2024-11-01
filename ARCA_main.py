@@ -268,6 +268,16 @@ else:
                 for x in range(5):
                     telegram_send('-')
                 print(msg_tele_serasa[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+        
+        elif dados_SCPC[0] == 'Erro 500':
+            telegram_send('Erro de processamento - favor aguardar nova tentativa')
+
+        else:
+            telegram_send(f'SCPC: {dados_SCPC[1]}')
+            print(dados_SCPC[1])
+            sheet.update_acell('G' + str(id_linha+1), dados_SCPC[1])
+            sheet.update_acell('H' + str(id_linha+1), datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
+
 
     end_msg = telegram_send('End check')
     print(end_msg[2], datetime.today().strftime('%d/%m/%Y %H:%M:%S'))
