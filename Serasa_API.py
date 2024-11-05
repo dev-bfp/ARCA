@@ -9,7 +9,7 @@ from Tokens import keys_serasa as ks
 def create_json(name, data):
     agora = datetime.now().strftime('%d-%m-%Y %H %M')
     dir_path = r"C:\Users\DEV\OneDrive\ARCA\logs_json"
-    #dir_path = r"C:\Users\brian\OneDrive\dev-bfp\GitHub\ARCA\logs_json"
+    #dir_path = r"C:\Users\financeiro\OneDrive\dev-bfp\GitHub\ARCA\logs_json"
     diretory = f'{dir_path}/Serasa-{name} {agora}.json'
     with open(diretory, 'w') as archive:
         json.dump(data,archive,indent=4)
@@ -69,3 +69,6 @@ def serasa_result(CPF):
       return False, 'Serasa: ' + dados_serasa['status']['mensagem']
 
 
+if __name__ == "__main__":
+  ...
+  # create_json("Washington Rocha",serasa_result("04419575360"))
