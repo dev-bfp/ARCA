@@ -135,7 +135,12 @@ def get_serasa_cpf(cpf):
     if str(dados.status_code) == '200':
         dados = dados.json()
         if dados['tem_restricao'] == 'true':
-            dados['resumo'] = f'Foram encontrados {dados['registros']} registros no valor total de R$ {dados['valor_total']} \n Primeira negativação em {dados['primeira_ocorrencia']} e última negativação em {dados['ultima_ocorrencia']}.'
+            registros = dados['registros']
+            valor_total = dados['valor_total']
+            primeira_ocorrencia = dados['primeira_ocorrencia']
+            ultima_ocorrencia = dados['ultima_ocorrencia']
+
+            dados['resumo'] = f'Foram encontrados {registros} registros no valor total de R$ {valor_total} \n Primeira negativação em {primeira_ocorrencia} e última negativação em {ultima_ocorrencia}.'
             print(dados)
         return True, dados
     else:
