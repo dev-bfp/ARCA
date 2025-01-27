@@ -128,7 +128,7 @@ def create_json(name, data):
 
 def get_serasa_cpf(cpf):
     '''
-    Busca
+    Busca dados no banco de dados do Serasa e retorna um resumo
     '''
     dados = requests.post(webhook_serasa, {"documento": cpf,"estado": "SP", "documento_tipo": "PF"})
     print(dados.json())
