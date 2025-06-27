@@ -122,5 +122,5 @@ def SCPC_result(solicitante,cpf):
 
 if __name__ == '__main__':
     # Insira o código de teste aqui
-    dados = SCPC_result("Carlos","39100313823")
+    dados = SCPC_result("Nome","12345678910")
     print(dados)

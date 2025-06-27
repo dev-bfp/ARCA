@@ -70,6 +70,6 @@ def serasa_result(CPF):
 
 
 if __name__ == "__main__":
-  dados = serasa_result("43739069805")
+  dados = serasa_result("12345678910")
   print(dados)
   # create_json("Washington Rocha",serasa_result("04419575360"))
